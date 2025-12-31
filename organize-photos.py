@@ -6,6 +6,9 @@ from datetime import datetime
 from PIL import Image
 from PIL.ExifTags import TAGS
 import argparse
+import pillow_heif
+
+pillow_heif.register_heif_opener()
 
 MEDIA_EXTENSIONS = [
   "jpg", "jpeg", "png", "gif", "bmp", "tiff", "webp", "heic",
@@ -48,15 +51,15 @@ def organize_images_by_year(dir_path):
 def get_date_from_metadata(img_path: str):
   try:
     img = Image.open(img_path)
-    exif_data = img._getexif()
+    exif_data = img.getexif()
 
     if not exif_data:
       return get_modified_date(img_path)
 
     exif = {TAGS.get(tag, tag): value for tag, value in exif_data.items()}
-    date_str = exif.get('DateTime', None)
+    date_str = exif.get('DateTimeOriginal') or exif.get('CreateDate') or exif.get('DateTime')
 
-    if date_str == None:
+    if not date_str:
       return get_modified_date(img_path)
     
     return str(date_str).replace(':', '-')
