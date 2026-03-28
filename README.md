@@ -1,8 +1,4 @@
-# scripts
-
-A collection of personal utility scripts.
-
-## organize-photos.py
+# organize-photos
 
 Organizes photos and videos in a directory by year based on their metadata. Files are moved into year-based subdirectories and renamed using their creation/modification timestamp.
 
